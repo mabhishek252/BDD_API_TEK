@@ -1,7 +1,7 @@
 /**
  * @author Abhishek.Mishra
  */
-package StepDefination;
+package stepDefination;
 
 import java.io.IOException;
 
@@ -49,24 +49,23 @@ public class TC_07_FutureDateAPI extends FrameworkUtils{
 	@SuppressWarnings("deprecation")
 	@Then("Validate the Latest Exchange rates for future date")
 	public void validateResponse() {
-		String statuscode = Integer.toString(validateAPIStatusCode());
-		Assert.assertEquals(statuscode, readPropertyFile("SUCCESS_RESPONSE_STATUS_CODE"));
-		log.info("API executed sucessfully and with response status code : "+ statuscode);
+			//Validation of Status Code from API response 
+			Assert.assertEquals(validateAPIStatusCode(), readPropertyFile("SUCCESS_RESPONSE_STATUS_CODE"));
+			log.info("API executed sucessfully with response status code : "+ validateAPIStatusCode());
 		
 		
-		String baseValue = JSONtoString.getValueByJPath(validateAPIResponse(), "/base");
-		log.info("Base Value of API : " + baseValue );
-		Assert.assertEquals(baseValue, readPropertyFile("Base_Value"));
+			//Validation of Base value from API Response
+			Assert.assertEquals(getBaseValue(), readPropertyFile("Base_Value"));
+			log.info("Base Value of API is : " + getBaseValue() );
 		
-		String exchangeRates = JSONtoString.getValueByJPath(validateAPIResponse(), "/rates");
-		log.info("Latest Exchange Rate against Euro Currency is: " + exchangeRates );
+			//Latest Exchange rates available in website 
+			log.info("Latest Exchange Rate against Euro Currency is: " +  exchangeRates());
 		
-		String date = JSONtoString.getValueByJPath(validateAPIResponse(), "/date");
-		Assert.assertEquals(date, readPropertyFile("Current_Date"));
-		log.info("API is getting Response of Euro Exchange rate available in website for Latest date : " + date );
-					
+		
+			//Validation of Date from future Exchange Rates API response, Its should fetch current date Exchange Rates as on API response
+			Assert.assertEquals(readPropertyFile("Current_Date"), getDate());
+			log.info("API is getting Response of " + getBaseValue() +" Exchange rate available in website for Latest date : " + getDate() );
+		 
 		}
-	
-	
 	
 }

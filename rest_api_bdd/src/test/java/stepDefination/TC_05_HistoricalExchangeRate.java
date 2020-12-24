@@ -1,4 +1,4 @@
-package StepDefination;
+package stepDefination;
 /**
  * @author Abhishek.Mishra
  */
@@ -43,21 +43,21 @@ public class TC_05_HistoricalExchangeRate extends FrameworkUtils{
 	@SuppressWarnings("deprecation")
 	@Then("Validate the Historical Exchange rates")
 	public void validateResponse() {
-		String statuscode = Integer.toString(validateAPIStatusCode());
-		Assert.assertEquals(statuscode, readPropertyFile("SUCCESS_RESPONSE_STATUS_CODE"));
-		log.info("API executed sucessfully and with response status code : "+ statuscode);
 		
-		
-		String baseValue = JSONtoString.getValueByJPath(validateAPIResponse(), "/base");
-		log.info("Base Value of API : " + baseValue );
-		Assert.assertEquals(baseValue, readPropertyFile("Base_Value"));
-		
-		String exchangeRates = JSONtoString.getValueByJPath(validateAPIResponse(), "/rates");
-		log.info("Latest Exchange Rate against Euro Currency is: " + exchangeRates );
-		
-		String date = JSONtoString.getValueByJPath(validateAPIResponse(), "/date");
-		Assert.assertEquals(date, readPropertyFile("Old_Date"));
-		log.info("API is getting Response of Euro Exchange rate available in website for Latest date : " + date );
+				//Validation of Status Code from API response 
+				Assert.assertEquals(validateAPIStatusCode(), readPropertyFile("SUCCESS_RESPONSE_STATUS_CODE"));
+				log.info("API executed sucessfully with response status code : "+ validateAPIStatusCode());
+
+				//Validation of Base value from API Response
+				Assert.assertEquals(getBaseValue(), readPropertyFile("Base_Value"));
+				log.info("Base Value of API is : " + getBaseValue() );
+				
+				//Validation of Date from API response
+				Assert.assertEquals(getDate(), readPropertyFile("Old_Date"));
+				log.info("API is getting Response of " + getBaseValue() +" Exchange rate available in website for date : " + getDate() );
+				
+				//Latest Exchange rates available in website 
+				log.info("Historical Exchange Rate against Euro Currency is: " +  exchangeRates());
 					
 		}
 }

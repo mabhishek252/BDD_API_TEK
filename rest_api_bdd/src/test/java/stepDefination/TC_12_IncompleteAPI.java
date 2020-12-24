@@ -1,7 +1,7 @@
 /**
  * @author Abhishek.Mishra
  */
-package StepDefination;
+package stepDefination;
 
 import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
@@ -14,13 +14,14 @@ import junit.framework.Assert;
 
 /**
  * @className TC_12_IncompleteAPI
- * @summary This is contain step definition for feature file ErrorMessage_ExchangeRateAPI.feature to test provided API
+ * @summary This is contain step definition for feature file
+ *          ErrorMessage_ExchangeRateAPI.feature to test provided API
  */
-public class TC_12_IncompleteAPI extends FrameworkUtils{
+public class TC_12_IncompleteAPI extends FrameworkUtils {
 	/**
 	 * @methodName setUpHttpConnection
 	 * @summary Get data from configuration files
-	 * @param 'IncorrectAPI' from config.properties file 
+	 * @param 'IncorrectAPI' from config.properties file
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
@@ -47,14 +48,15 @@ public class TC_12_IncompleteAPI extends FrameworkUtils{
 	@SuppressWarnings("deprecation")
 	@Then("Validate the error message")
 	public void validateResponse() {
-		String statuscode = Integer.toString(validateAPIStatusCode());
-		Assert.assertEquals(statuscode, readPropertyFile("ERROR_RESPONSE_STATUS_CODE"));
-		log.info("API executed sucessfully and with response status code : "+ statuscode);
-		
-		
-		String errorMsg = JSONtoString.getValueByJPath(validateAPIResponse(), "/");
-		Assert.assertEquals(errorMsg, readPropertyFile("ErrorMsg"));
-		log.info("Error message for incomplete API  < " + readPropertyFile("IncorrectAPI") + " >  is : " + errorMsg);
-		
-		}
+
+		// Validation of Status Code from API response
+		Assert.assertEquals(validateAPIStatusCode(), readPropertyFile("ERROR_RESPONSE_STATUS_CODE"));
+		log.info("API executed sucessfully with response status code : " + validateAPIStatusCode());
+
+		// Validation of Error Message from incorrect API Response
+		Assert.assertEquals(getErrorMessage(), readPropertyFile("ErrorMsg"));
+		log.info("Error message for incomplete API  < " + readPropertyFile("IncorrectAPI") + " >  is : "
+				+ getErrorMessage());
+
+	}
 }

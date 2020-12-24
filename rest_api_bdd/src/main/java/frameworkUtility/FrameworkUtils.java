@@ -24,15 +24,15 @@ import httpClients.RestClient;
 public class FrameworkUtils {
 
 	/**
-	 * @description Variables declared Globally in below section.
+	 * @description Variables declaration in below section.
 	 */
 	static String projectPath = System.getProperty("user.dir");
 	static Properties prop = new Properties();
-	protected static Logger log = Logger.getLogger(FrameworkUtils.class);
+	public Logger log = Logger.getLogger(FrameworkUtils.class);
 	String exchangeRate;
-	RestClient restclient;
-	CloseableHttpResponse httpResponse;
-	String reponseInString;
+	public RestClient restclient;
+	protected CloseableHttpResponse httpResponse;
+	public String reponseInString;
 
 	/**
 	 * @methodName readPropertyFile
@@ -68,7 +68,7 @@ public class FrameworkUtils {
 
 	/**
 	 * @methodName sendRequest
-	 * @summary Send Get API request to client 
+	 * @summary Send Get API request to client
 	 */
 	public void sendRequest() {
 		restclient = new RestClient();
@@ -84,10 +84,12 @@ public class FrameworkUtils {
 	/**
 	 * @methodName validateAPIStatusCode
 	 * @summary Fetch API response status code from client
-	 * @return Status Code of API as Integer
+	 * @return Status Code of API as String
 	 */
-	public int validateAPIStatusCode() {
-		int statusCode = httpResponse.getStatusLine().getStatusCode();
+	public String validateAPIStatusCode() {
+		int statusCodeinInt = httpResponse.getStatusLine().getStatusCode();
+		String statusCode = Integer.toString(statusCodeinInt);
+
 		return statusCode;
 	}
 
@@ -96,7 +98,7 @@ public class FrameworkUtils {
 	 * @summary Fetch API All response from client
 	 * @return API response in JSON format
 	 */
-	public JSONObject validateAPIResponse() {
+	public JSONObject apiResponseInJSON() {
 		try {
 			reponseInString = EntityUtils.toString(httpResponse.getEntity(), readPropertyFile("ResponseFormat"));
 		} catch (ParseException e) {
@@ -106,6 +108,46 @@ public class FrameworkUtils {
 		}
 		JSONObject responseInJSON = new JSONObject(reponseInString);
 		return responseInJSON;
+	}
+
+	/**
+	 * @methodName getBaseValue
+	 * @summary Fetch Base Value from API response
+	 * @return String
+	 */
+	public String getBaseValue() {
+		String baseValue = JSONtoString.getValueByJPath(apiResponseInJSON(), "/base");
+		return baseValue;
+	}
+
+	/**
+	 * @methodName getDate
+	 * @summary Fetch Date from API response
+	 * @return
+	 */
+	public String getDate() {
+		String date = JSONtoString.getValueByJPath(apiResponseInJSON(), "/date");
+		return date;
+	}
+
+	/**
+	 * @methodName exchangeRates
+	 * @summary Fetch Exchange Rates from API response
+	 * @return
+	 */
+	public String exchangeRates() {
+		String exchangeRates = JSONtoString.getValueByJPath(apiResponseInJSON(), "/rates");
+		return exchangeRates;
+	}
+
+	/**
+	 * @methodName getErrorMessage
+	 * @summary Fetch Error message from incorrect API response
+	 * @return
+	 */
+	public String getErrorMessage() {
+		String errorMsg = JSONtoString.getValueByJPath(apiResponseInJSON(), "/");
+		return errorMsg;
 	}
 
 }
